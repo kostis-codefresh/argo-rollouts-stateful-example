@@ -1,0 +1,78 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: kubernetes-downwardapi-example
+  labels:
+    zone: us-est-coast
+    cluster: test-cluster1
+    rack: rack-22
+    canary-status: preview
+  annotations:
+    build: two
+    builder: john-doe
+    io.codefresh/demo: whole-deployment
+spec:
+  replicas: 3
+  strategy:
+    blueGreen: 
+      # activeService specifies the service to update with the new template hash at time of promotion.
+      # This field is mandatory for the blueGreen update strategy.    
+      activeService: backend-active
+      # previewService specifies the service to update with the new template hash before promotion.
+      # This allows the preview stack to be reachable without serving production traffic.
+      # This field is optional.      
+      previewService: backend-preview
+      # autoPromotionEnabled disables automated promotion of the new stack by pausing the rollout
+      # immediately before the promotion. If omitted, the default behavior is to promote the new
+      # stack as soon as the ReplicaSet are completely ready/available.
+      # Rollouts can be resumed using: `kubectl argo rollouts resume ROLLOUT`      
+      autoPromotionEnabled: false  
+      activeMetadata:
+        labels:
+          role: active
+      previewMetadata:
+        labels:
+          role: preview       
+  revisionHistoryLimit: 1    
+  selector:
+    matchLabels:
+      app: interest
+  template:
+    metadata:
+      labels:
+        app: interest  
+        canary-status: preview-deployment
+        io.codefresh/demo: in-container       
+      annotations:
+        sidecar.istio.io/inject: "false" 
+    spec:
+      containers:
+        - name: client-container
+          image: registry.k8s.io/busybox
+          env:
+          - name: APP_VERSION
+            value: "2.0" 
+          command: ["sh", "-c"]
+          args:
+          - while true; do
+              if [[ -e /etc/podinfo/labels ]]; then
+                echo -en '\n\n'; cat /etc/podinfo/labels; fi;
+              if [[ -e /etc/podinfo/annotations ]]; then
+                echo -en '\n\n'; cat /etc/podinfo/annotations; fi;
+              sleep 5;
+              printenv APP_VERSION;
+            done; 
+          volumeMounts:
+            - name: podinfo
+              mountPath: /etc/podinfo
+      volumes:
+        - name: podinfo
+          downwardAPI:
+            items:
+              - path: "labels"
+                fieldRef:
+                  fieldPath: metadata.labels
+              - path: "annotations"
+                fieldRef:
+                  fieldPath: metadata.annotations
+
