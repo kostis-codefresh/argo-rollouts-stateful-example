@@ -57,3 +57,20 @@ h1, h2{
 
 }
 
+.button{
+    position: relative;
+    padding: 5px;
+    margin: 20px 20px;
+    font-weight: 500;
+    font-size: 16px;
+    background-color: #08B1AB;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    outline: none;
+    width: 20%;
+    height: 40px;
+    border-radius: 5px;
+    font-family: 'Poppins',sans-serif;
+}
+

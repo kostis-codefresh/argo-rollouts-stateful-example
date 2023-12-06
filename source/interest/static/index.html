@@ -25,12 +25,12 @@
       </div>
       <div class="entry">
         <span id="current-conf">
+          My settings as read from <code>/etc/podinfo/labels</code>
           <ul>
             <li>My current role is {{ . }} also available at <a href='role'>role</a></li>
             <li>My RabbitMQ server is at XXX </li>
             <li>Reading messages from queue named xxxx automatically every 2 seconds</li>
             <li>I will send responses to queue named xxx</li>
-            <li>I found my configuration at /etc/podinfo/labels</li> 
           </ul>  
         </span>
       </div>
@@ -48,7 +48,11 @@
           </ul>
         </span>
       </div>
-
+      <!-- <div class="entry">
+        <span id="description">
+          I have processed XXX messages so far. Also available at <a href='count'>count</a>
+        </span>
+      </div> -->
 
 
 
@@ -56,8 +60,9 @@
     </div>
 
     <h2>Live log of messages processed</h2>
+    <button class="button">Send dummy message</button>
 
-    <div class="entries" hx-get="list" hx-trigger="every 1s">
+    <div class="entries">
         
         
       <div class="entry">
