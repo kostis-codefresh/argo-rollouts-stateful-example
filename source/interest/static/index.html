@@ -3,23 +3,35 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Backend microservice (interest rates)</title>
+  <title>Queue Worker (interest rates)</title>
   <link rel="shortcut icon" href="favicon.png" type="image/png" />
   <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/htmx.org@1.8.0" integrity="sha384-cZuAZ+ZbwkNRnrKi05G/fjBX+azI9DNOkNYysZ0I/X5ZFgsmMiBXgDZof30F5ofc" crossorigin="anonymous"></script>  
 </head>
 
 <body>
   <div class="container">
     <img src="transparent-logo.png" class="center">
 
-    <h1>Backend microservice (interest rates)</h1>
+    <h1>Queue worker (interest rates)</h1>
 
-    <div id="entries">
+    <div class="entries">
 
 
       <div class="entry">
         <span id="version">
           My version is {{ . }} also available at <a href='version'>version</a>
+        </span>
+      </div>
+      <div class="entry">
+        <span id="current-conf">
+          <ul>
+            <li>My current role is {{ . }} also available at <a href='role'>role</a></li>
+            <li>My RabbitMQ server is at XXX </li>
+            <li>Reading messages from queue named xxxx automatically every 2 seconds</li>
+            <li>I will send responses to queue named xxx</li>
+            <li>I found my configuration at /etc/podinfo/labels</li> 
+          </ul>  
         </span>
       </div>
       <div class="entry">
@@ -39,6 +51,28 @@
 
 
 
+
+
+    </div>
+
+    <h2>Live log of messages processed</h2>
+
+    <div class="entries" hx-get="list" hx-trigger="every 1s">
+        
+        
+      <div class="entry">
+                <span id="dfd">
+                    Application web was deployed successfully to cluster 3
+                </span>
+            </div>
+
+      <div class="entry">
+                <span id="dfdf">
+                    Application web was deployed successfully to cluster 2
+                </span>
+            </div>
+
+     
     </div>
 
   </div>
