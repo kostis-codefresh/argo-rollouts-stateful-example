@@ -1,0 +1,15 @@
+services:
+  loan:
+    build: ./loan
+    ports:
+      - "9000:8080"
+    environment:
+    - APP_VERSION=1.5  
+    depends_on:
+      - interest
+  interest:
+    build: ./interest
+    ports:
+      - "8080:8080"
+    environment:
+    - APP_VERSION=2.0          

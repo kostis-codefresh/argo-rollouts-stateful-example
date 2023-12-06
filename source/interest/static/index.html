@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Backend microservice (interest rates)</title>
+  <link rel="shortcut icon" href="favicon.png" type="image/png" />
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="container">
+    <img src="transparent-logo.png" class="center">
+
+    <h1>Backend microservice (interest rates)</h1>
+
+    <div id="entries">
+
+
+      <div class="entry">
+        <span id="version">
+          My version is {{ . }} also available at <a href='version'>version</a>
+        </span>
+      </div>
+      <div class="entry">
+        <span id="description">
+          I calculate interests. Call <a href='api/v1/interest'>api/v1/interest</a> to get your quote.
+        </span>
+      </div>
+
+      <div class="entry">
+        <span id="endpoints">
+          <ul>
+            <li>Liveness endpoint is at <a href='health/live'>health/live</a></li>
+            <li>Readiness endpoint is at <a href='health/ready'>health/ready</a></li>
+          </ul>
+        </span>
+      </div>
+
+
+
+    </div>
+
+  </div>
+
+</body>
+
+</html>
