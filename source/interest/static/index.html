@@ -20,23 +20,18 @@
 
       <div class="entry">
         <span id="version">
-          My version is {{ . }} also available at <a href='version'>version</a>
+          My version is <strong>{{ .AppVersion }}</strong> also available at <a href='version'>version</a>
         </span>
       </div>
       <div class="entry">
         <span id="current-conf">
           My settings as read from <code>/etc/podinfo/labels</code>
           <ul>
-            <li>My current role is {{ . }} also available at <a href='role'>role</a></li>
-            <li>My RabbitMQ server is at XXX </li>
-            <li>Reading messages from queue named xxxx automatically every 2 seconds</li>
-            <li>I will send responses to queue named xxx</li>
+            <li>My current role is <strong>{{ .CurrentRole }}</strong> also available at <a href='role'>role</a></li>
+            <li>My RabbitMQ server is at <strong>{{ .RabbitHost }}:{{ .RabbitPort }} </strong></li>
+            <li>Reading messages from queue named <strong>{{ .RabbitReadQueue }} </strong> automatically every 2 seconds</li>
+            <li>I will send responses to queue named <strong>{{ .RabbitWriteQueue }} </strong></li>
           </ul>  
-        </span>
-      </div>
-      <div class="entry">
-        <span id="description">
-          I calculate interests. Call <a href='api/v1/interest'>api/v1/interest</a> to get your quote.
         </span>
       </div>
 
@@ -48,11 +43,11 @@
           </ul>
         </span>
       </div>
-      <!-- <div class="entry">
+      <div class="entry">
         <span id="description">
-          I have processed XXX messages so far. Also available at <a href='count'>count</a>
+          I have processed <strong>{{ .MessagesProcessed }} </strong>messages so far. Also available at <a href='count'>count</a>
         </span>
-      </div> -->
+      </div>
 
 
 

@@ -12,7 +12,15 @@ import (
 	"time"
 )
 
-var app_version = "dev"
+type InterestApplication struct {
+	AppVersion        string
+	CurrentRole       string
+	RabbitHost        string
+	RabbitPort        string
+	RabbitReadQueue   string
+	RabbitWriteQueue  string
+	MessagesProcessed int
+}
 
 func main() {
 
@@ -21,14 +29,22 @@ func main() {
 		port = "8080"
 	}
 
-	app_version = os.Getenv("APP_VERSION")
-	if len(app_version) == 0 {
-		app_version = "dev"
+	interestApp := InterestApplication{}
+
+	interestApp.AppVersion = os.Getenv("APP_VERSION")
+	if len(interestApp.AppVersion) == 0 {
+		interestApp.AppVersion = "dev"
 	}
 
-	// Allow front-end to retrieve version
+	interestApp.CurrentRole = "demoRole"
+	interestApp.RabbitHost = "demoHost"
+	interestApp.RabbitPort = "demoPort"
+	interestApp.RabbitReadQueue = "readExample"
+	interestApp.RabbitWriteQueue = "writeExample"
+	interestApp.MessagesProcessed = 42
+
 	http.HandleFunc("/version", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, app_version)
+		fmt.Fprintln(w, interestApp.AppVersion)
 	})
 
 	// Kubernetes check if app is ok
@@ -47,18 +63,18 @@ func main() {
 		fmt.Fprint(w, (calculatedInterest.Intn(26) + 10))
 	})
 
-	http.HandleFunc("/", serveFiles)
+	http.HandleFunc("/", interestApp.serveFiles)
 
-	fmt.Printf("Backend version %s is listening now at port %s\n", app_version, port)
+	fmt.Printf("Backend version %s is listening now at port %s\n", interestApp.AppVersion, port)
 	err := http.ListenAndServe(":"+port, nil)
 	log.Fatal(err)
 }
 
-func serveFiles(w http.ResponseWriter, r *http.Request) {
+func (interestApp *InterestApplication) serveFiles(w http.ResponseWriter, r *http.Request) {
 	upath := r.URL.Path
 	p := "." + upath
 	if p == "./" {
-		home(w, r)
+		interestApp.home(w, r)
 		return
 	} else {
 		p = filepath.Join("./static/", path.Clean(upath))
@@ -66,14 +82,17 @@ func serveFiles(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, p)
 }
 
-func home(w http.ResponseWriter, r *http.Request) {
+func (interestApp *InterestApplication) home(w http.ResponseWriter, r *http.Request) {
+
+	// loanApp.findBackendVersion()
+
 	t, err := template.ParseFiles("./static/index.html")
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		log.Printf("Error parsing template: %v", err)
 		return
 	}
-	err = t.Execute(w, app_version)
+	err = t.Execute(w, interestApp)
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		log.Printf("Error executing template: %v", err)
