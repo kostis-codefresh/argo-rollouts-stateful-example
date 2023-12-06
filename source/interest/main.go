@@ -47,6 +47,14 @@ func main() {
 		fmt.Fprintln(w, interestApp.AppVersion)
 	})
 
+	http.HandleFunc("/count", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintln(w, interestApp.MessagesProcessed)
+	})
+
+	http.HandleFunc("/role", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintln(w, interestApp.CurrentRole)
+	})
+
 	// Kubernetes check if app is ok
 	http.HandleFunc("/health/live", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "up")
