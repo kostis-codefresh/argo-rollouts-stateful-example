@@ -78,11 +78,23 @@ func main() {
 		fmt.Fprint(w, (calculatedInterest.Intn(26) + 10))
 	})
 
+	ticker := time.NewTicker(1 * time.Second)
+
+	go func() {
+		for range ticker.C {
+			interestApp.timer()
+		}
+	}()
+
 	http.HandleFunc("/", interestApp.serveFiles)
 
 	fmt.Printf("Backend version %s is listening now at port %s\n", interestApp.AppVersion, port)
 	err := http.ListenAndServe(":"+port, nil)
 	log.Fatal(err)
+}
+
+func (interestApp *InterestApplication) timer() {
+	fmt.Printf("Processing message from queue %s at %s:%s\n", interestApp.RabbitReadQueue, interestApp.RabbitHost, interestApp.RabbitPort)
 }
 
 func (interestApp *InterestApplication) serveFiles(w http.ResponseWriter, r *http.Request) {
