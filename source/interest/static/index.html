@@ -6,7 +6,9 @@
   <title>Queue Worker (interest rates)</title>
   <link rel="shortcut icon" href="favicon.png" type="image/png" />
   <link rel="stylesheet" href="style.css">
-  <script src="https://unpkg.com/htmx.org@1.8.0" integrity="sha384-cZuAZ+ZbwkNRnrKi05G/fjBX+azI9DNOkNYysZ0I/X5ZFgsmMiBXgDZof30F5ofc" crossorigin="anonymous"></script>  
+  <script src="https://unpkg.com/htmx.org@1.8.0"
+    integrity="sha384-cZuAZ+ZbwkNRnrKi05G/fjBX+azI9DNOkNYysZ0I/X5ZFgsmMiBXgDZof30F5ofc"
+    crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -29,9 +31,10 @@
           <ul>
             <li>My current role is <strong>{{ .CurrentRole }}</strong> also available at <a href='role'>role</a></li>
             <li>My RabbitMQ server is at <strong>{{ .RabbitHost }}:{{ .RabbitPort }} </strong></li>
-            <li>Reading messages from queue named <strong>{{ .RabbitReadQueue }} </strong> automatically every 2 seconds</li>
+            <li>Reading messages from queue named <strong>{{ .RabbitReadQueue }} </strong> automatically every 2 seconds
+            </li>
             <li>I will send responses to queue named <strong>{{ .RabbitWriteQueue }} </strong></li>
-          </ul>  
+          </ul>
         </span>
       </div>
 
@@ -45,7 +48,8 @@
       </div>
       <div class="entry">
         <span id="description">
-          I have processed <strong>{{ .MessagesProcessed }} </strong>messages so far. Also available at <a href='count'>count</a>
+          I have processed <strong>{{ .MessagesProcessed }} </strong>messages so far. Also available at <a
+            href='count'>count</a>
         </span>
       </div>
 
@@ -55,24 +59,27 @@
     </div>
 
     <h2>Live log of messages processed</h2>
-    <button class="button" hx-post="/dummy" hx-swap="none">Send dummy message</button>
+    <button class="button" hx-post="/dummy" hx-target="#dummyCounter">Send dummy message</button>
 
+    <span id="dummyCounter">
+      Sent 0
+    </span>
     <div class="entries">
-        
-        
-      <div class="entry">
-                <span id="dfd">
-                    Application web was deployed successfully to cluster 3
-                </span>
-            </div>
+
 
       <div class="entry">
-                <span id="dfdf">
-                    Application web was deployed successfully to cluster 2
-                </span>
-            </div>
+        <span id="dfd">
+          Application web was deployed successfully to cluster 3
+        </span>
+      </div>
 
-     
+      <div class="entry">
+        <span id="dfdf">
+          Application web was deployed successfully to cluster 2
+        </span>
+      </div>
+
+
     </div>
 
   </div>

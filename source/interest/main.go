@@ -20,6 +20,7 @@ type InterestApplication struct {
 	RabbitReadQueue   string
 	RabbitWriteQueue  string
 	MessagesProcessed int
+	dummyCounter      int
 }
 
 func main() {
@@ -67,7 +68,8 @@ func main() {
 
 	http.HandleFunc("/dummy", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("Sending dummy message on queue %s at %s:%s\n", interestApp.RabbitReadQueue, interestApp.RabbitHost, interestApp.RabbitPort)
-		fmt.Fprintln(w, "Sent!")
+		interestApp.dummyCounter++
+		fmt.Fprintf(w, "Sent %d", interestApp.dummyCounter)
 	})
 
 	http.HandleFunc("/api/v1/interest", func(w http.ResponseWriter, r *http.Request) {
