@@ -20,6 +20,7 @@ type InterestApplication struct {
 	RabbitReadQueue   string
 	RabbitWriteQueue  string
 	MessagesProcessed int
+	LastMessages      [5]string //Currently last 5
 	dummyCounter      int
 }
 
@@ -72,6 +73,8 @@ func main() {
 		fmt.Fprintf(w, "Sent %d", interestApp.dummyCounter)
 	})
 
+	http.HandleFunc("/list", interestApp.listNotifications)
+
 	http.HandleFunc("/api/v1/interest", func(w http.ResponseWriter, r *http.Request) {
 		randomSource := rand.NewSource(time.Now().UnixNano())
 		calculatedInterest := rand.New(randomSource)
@@ -95,6 +98,7 @@ func main() {
 
 func (interestApp *InterestApplication) timer() {
 	fmt.Printf("Processing message from queue %s at %s:%s\n", interestApp.RabbitReadQueue, interestApp.RabbitHost, interestApp.RabbitPort)
+	interestApp.LastMessages[0] = "dfdf"
 }
 
 func (interestApp *InterestApplication) serveFiles(w http.ResponseWriter, r *http.Request) {
@@ -124,5 +128,13 @@ func (interestApp *InterestApplication) home(w http.ResponseWriter, r *http.Requ
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		log.Printf("Error executing template: %v", err)
 		return
+	}
+}
+
+func (interestApp *InterestApplication) listNotifications(w http.ResponseWriter, req *http.Request) {
+	// nh.mu.RLock()
+	// defer nh.mu.RUnlock()
+	for _, notification := range interestApp.LastMessages {
+		fmt.Fprintf(w, "<div class=\"entry\"><span>%s</span></div>", notification)
 	}
 }
