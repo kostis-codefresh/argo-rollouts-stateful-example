@@ -65,6 +65,11 @@ func main() {
 		fmt.Fprintln(w, "yes")
 	})
 
+	http.HandleFunc("/dummy", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Printf("Sending dummy message on queue %s at %s:%s\n", interestApp.RabbitReadQueue, interestApp.RabbitHost, interestApp.RabbitPort)
+		fmt.Fprintln(w, "Sent!")
+	})
+
 	http.HandleFunc("/api/v1/interest", func(w http.ResponseWriter, r *http.Request) {
 		randomSource := rand.NewSource(time.Now().UnixNano())
 		calculatedInterest := rand.New(randomSource)
