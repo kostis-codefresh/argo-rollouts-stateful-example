@@ -39,10 +39,10 @@ func main() {
 	}
 
 	interestApp.CurrentRole = "demoRole"
-	interestApp.RabbitHost = "demoHost"
-	interestApp.RabbitPort = "demoPort"
-	interestApp.RabbitReadQueue = "readExample"
-	interestApp.RabbitWriteQueue = "writeExample"
+	interestApp.RabbitHost = "localhost"
+	interestApp.RabbitPort = "5672"
+	interestApp.RabbitReadQueue = "demoReaqQueue"
+	interestApp.RabbitWriteQueue = "demoWriteQueue"
 	interestApp.MessagesProcessed = 42
 
 	http.HandleFunc("/version", func(w http.ResponseWriter, r *http.Request) {
@@ -67,9 +67,10 @@ func main() {
 		fmt.Fprintln(w, "yes")
 	})
 
+	interestApp.startReadingMessages()
+
 	http.HandleFunc("/dummy", func(w http.ResponseWriter, r *http.Request) {
 		interestApp.publishMessage()
-		interestApp.dummyCounter++
 		fmt.Fprintf(w, "Sent %d", interestApp.dummyCounter)
 	})
 
@@ -80,8 +81,6 @@ func main() {
 		calculatedInterest := rand.New(randomSource)
 		fmt.Fprint(w, (calculatedInterest.Intn(26) + 10))
 	})
-
-	interestApp.startReadingMessages()
 
 	// ticker := time.NewTicker(1 * time.Second)
 

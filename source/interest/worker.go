@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/ThreeDotsLabs/watermill"
 	"github.com/ThreeDotsLabs/watermill-amqp/v2/pkg/amqp"
@@ -14,17 +13,12 @@ import (
 var amqpURI = "amqp://guest:guest@localhost:5672/"
 
 func (interestApp *InterestApplication) startReadingMessages() {
-	fmt.Printf("Processing message from queue %s at %s:%s\n", interestApp.RabbitReadQueue, interestApp.RabbitHost, interestApp.RabbitPort)
+	fmt.Printf("Connecting to %s:%s\n", interestApp.RabbitHost, interestApp.RabbitPort)
 	interestApp.LastMessages[0] = "dfdf"
 
 	amqpConfig := amqp.NewDurableQueueConfig(amqpURI)
 
 	subscriber, err := amqp.NewSubscriber(
-		// This config is based on this example: https://www.rabbitmq.com/tutorials/tutorial-two-go.html
-		// It works as a simple queue.
-		//
-		// If you want to implement a Pub/Sub style service instead, check
-		// https://watermill.io/pubsubs/amqp/#amqp-consumer-groups
 		amqpConfig,
 		watermill.NopLogger{},
 	)
@@ -38,9 +32,9 @@ func (interestApp *InterestApplication) startReadingMessages() {
 	}
 
 	go process(messages)
-
-	// go publishMessages(publisher)
+	fmt.Printf("Ready to receive messages at %s\n", interestApp.RabbitReadQueue)
 }
+
 func (interestApp *InterestApplication) publishMessage() {
 	fmt.Printf("Sending dummy message on queue %s at %s:%s\n", interestApp.RabbitReadQueue, interestApp.RabbitHost, interestApp.RabbitPort)
 	amqpConfig := amqp.NewDurableQueueConfig(amqpURI)
@@ -53,17 +47,7 @@ func (interestApp *InterestApplication) publishMessage() {
 	if err := publisher.Publish("example.topic", msg); err != nil {
 		panic(err)
 	}
-}
-func publishMessages(publisher message.Publisher) {
-	for {
-		msg := message.NewMessage(watermill.NewUUID(), []byte("Hello, world!"))
-
-		if err := publisher.Publish("example.topic", msg); err != nil {
-			panic(err)
-		}
-
-		time.Sleep(time.Second)
-	}
+	interestApp.dummyCounter++
 }
 
 func process(messages <-chan *message.Message) {
