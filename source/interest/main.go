@@ -1,6 +1,7 @@
 package main
 
 import (
+	"container/list"
 	"fmt"
 	"html/template"
 	"log"
@@ -23,7 +24,7 @@ type InterestApplication struct {
 
 	mu                sync.RWMutex
 	MessagesProcessed int
-	LastMessages      [5]string //Assume that last 5 are enough
+	LastMessages      *list.List //Assume that last 5 are enough
 	dummyCounter      int
 }
 
@@ -70,6 +71,7 @@ func main() {
 		fmt.Fprintln(w, "yes")
 	})
 
+	interestApp.LastMessages = list.New()
 	interestApp.startReadingMessages()
 
 	http.HandleFunc("/dummy", func(w http.ResponseWriter, r *http.Request) {
@@ -138,8 +140,8 @@ func (interestApp *InterestApplication) home(w http.ResponseWriter, r *http.Requ
 func (interestApp *InterestApplication) listNotifications(w http.ResponseWriter, req *http.Request) {
 	interestApp.mu.RLock()
 	defer interestApp.mu.RUnlock()
-	for _, notification := range interestApp.LastMessages {
-		fmt.Fprintf(w, "<div class=\"entry\"><span>%s</span></div>", notification)
+	for m := interestApp.LastMessages.Front(); m != nil; m = m.Next() {
+		fmt.Fprintf(w, "<div class=\"entry\"><span>%s</span></div>", m.Value)
 	}
 	fmt.Fprintf(w, "<strong id=\"count\" hx-swap-oob=\"true\">%d</strong>", interestApp.MessagesProcessed)
 }

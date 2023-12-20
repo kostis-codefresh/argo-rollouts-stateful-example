@@ -14,7 +14,6 @@ var amqpURI = "amqp://guest:guest@localhost:5672/"
 
 func (interestApp *InterestApplication) startReadingMessages() {
 	fmt.Printf("Connecting to %s:%s\n", interestApp.RabbitHost, interestApp.RabbitPort)
-	interestApp.LastMessages[0] = "dfdf"
 
 	amqpConfig := amqp.NewDurableQueueConfig(amqpURI)
 
@@ -55,6 +54,12 @@ func (interestApp *InterestApplication) process(messages <-chan *message.Message
 	defer interestApp.mu.RUnlock()
 	for msg := range messages {
 		fmt.Printf("received message: %s, payload: %s\n", msg.UUID, string(msg.Payload))
+
+		interestApp.LastMessages.PushBack(msg.Payload)
+		if interestApp.LastMessages.Len() > 5 {
+			oldest := interestApp.LastMessages.Front()
+			interestApp.LastMessages.Remove(oldest)
+		}
 
 		// we need to Acknowledge that we received and processed the message,
 		// otherwise, it will be resent over and over again.
