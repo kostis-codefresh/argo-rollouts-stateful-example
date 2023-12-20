@@ -31,7 +31,7 @@ func (interestApp *InterestApplication) startReadingMessages() {
 		panic(err)
 	}
 
-	go process(messages)
+	go interestApp.process(messages)
 	fmt.Printf("Ready to receive messages at %s\n", interestApp.RabbitReadQueue)
 }
 
@@ -50,12 +50,13 @@ func (interestApp *InterestApplication) publishMessage() {
 	interestApp.dummyCounter++
 }
 
-func process(messages <-chan *message.Message) {
+func (interestApp *InterestApplication) process(messages <-chan *message.Message) {
 	for msg := range messages {
 		fmt.Printf("received message: %s, payload: %s\n", msg.UUID, string(msg.Payload))
 
 		// we need to Acknowledge that we received and processed the message,
 		// otherwise, it will be resent over and over again.
 		msg.Ack()
+		interestApp.MessagesProcessed++
 	}
 }

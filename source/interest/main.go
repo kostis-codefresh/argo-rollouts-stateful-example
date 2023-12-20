@@ -43,7 +43,7 @@ func main() {
 	interestApp.RabbitPort = "5672"
 	interestApp.RabbitReadQueue = "demoReaqQueue"
 	interestApp.RabbitWriteQueue = "demoWriteQueue"
-	interestApp.MessagesProcessed = 42
+	interestApp.MessagesProcessed = 0
 
 	http.HandleFunc("/version", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, interestApp.AppVersion)
@@ -138,4 +138,5 @@ func (interestApp *InterestApplication) listNotifications(w http.ResponseWriter,
 	for _, notification := range interestApp.LastMessages {
 		fmt.Fprintf(w, "<div class=\"entry\"><span>%s</span></div>", notification)
 	}
+	fmt.Fprintf(w, "<strong id=\"count\" hx-swap-oob=\"true\">%d</strong>", interestApp.MessagesProcessed)
 }
