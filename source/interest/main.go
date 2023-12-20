@@ -41,7 +41,9 @@ func main() {
 		interestApp.AppVersion = "dev"
 	}
 
-	interestApp.CurrentRole = "demoRole"
+	interestApp.readCurrentRole()
+
+	// interestApp.CurrentRole = "demoRole"
 	interestApp.RabbitHost = "localhost"
 	interestApp.RabbitPort = "5672"
 	interestApp.RabbitReadQueue = "demoReadQueue"
