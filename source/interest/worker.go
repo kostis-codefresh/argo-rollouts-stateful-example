@@ -51,6 +51,8 @@ func (interestApp *InterestApplication) publishMessage() {
 }
 
 func (interestApp *InterestApplication) process(messages <-chan *message.Message) {
+	interestApp.mu.RLock()
+	defer interestApp.mu.RUnlock()
 	for msg := range messages {
 		fmt.Printf("received message: %s, payload: %s\n", msg.UUID, string(msg.Payload))
 

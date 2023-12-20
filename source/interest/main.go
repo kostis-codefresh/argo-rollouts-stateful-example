@@ -9,18 +9,21 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"sync"
 	"time"
 )
 
 type InterestApplication struct {
-	AppVersion        string
-	CurrentRole       string
-	RabbitHost        string
-	RabbitPort        string
-	RabbitReadQueue   string
-	RabbitWriteQueue  string
+	AppVersion       string
+	CurrentRole      string
+	RabbitHost       string
+	RabbitPort       string
+	RabbitReadQueue  string
+	RabbitWriteQueue string
+
+	mu                sync.RWMutex
 	MessagesProcessed int
-	LastMessages      [5]string //Currently last 5
+	LastMessages      [5]string //Assume that last 5 are enough
 	dummyCounter      int
 }
 
@@ -41,7 +44,7 @@ func main() {
 	interestApp.CurrentRole = "demoRole"
 	interestApp.RabbitHost = "localhost"
 	interestApp.RabbitPort = "5672"
-	interestApp.RabbitReadQueue = "demoReaqQueue"
+	interestApp.RabbitReadQueue = "demoReadQueue"
 	interestApp.RabbitWriteQueue = "demoWriteQueue"
 	interestApp.MessagesProcessed = 0
 
@@ -133,8 +136,8 @@ func (interestApp *InterestApplication) home(w http.ResponseWriter, r *http.Requ
 }
 
 func (interestApp *InterestApplication) listNotifications(w http.ResponseWriter, req *http.Request) {
-	// nh.mu.RLock()
-	// defer nh.mu.RUnlock()
+	interestApp.mu.RLock()
+	defer interestApp.mu.RUnlock()
 	for _, notification := range interestApp.LastMessages {
 		fmt.Fprintf(w, "<div class=\"entry\"><span>%s</span></div>", notification)
 	}
