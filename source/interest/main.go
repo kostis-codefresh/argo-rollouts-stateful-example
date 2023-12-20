@@ -15,12 +15,11 @@ import (
 )
 
 type InterestApplication struct {
-	AppVersion       string
-	CurrentRole      string
-	RabbitHost       string
-	RabbitPort       string
-	RabbitReadQueue  string
-	RabbitWriteQueue string
+	AppVersion      string
+	CurrentRole     string
+	RabbitHost      string
+	RabbitPort      string
+	RabbitReadQueue string
 
 	mu                sync.RWMutex
 	MessagesProcessed int
@@ -46,7 +45,6 @@ func main() {
 	interestApp.RabbitHost = "localhost"
 	interestApp.RabbitPort = "5672"
 	interestApp.RabbitReadQueue = "demoReadQueue"
-	interestApp.RabbitWriteQueue = "demoWriteQueue"
 	interestApp.MessagesProcessed = 0
 
 	http.HandleFunc("/version", func(w http.ResponseWriter, r *http.Request) {
