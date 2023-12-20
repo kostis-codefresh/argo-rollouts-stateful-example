@@ -68,7 +68,7 @@ func main() {
 	})
 
 	http.HandleFunc("/dummy", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Printf("Sending dummy message on queue %s at %s:%s\n", interestApp.RabbitReadQueue, interestApp.RabbitHost, interestApp.RabbitPort)
+		interestApp.publishMessage()
 		interestApp.dummyCounter++
 		fmt.Fprintf(w, "Sent %d", interestApp.dummyCounter)
 	})
@@ -81,13 +81,15 @@ func main() {
 		fmt.Fprint(w, (calculatedInterest.Intn(26) + 10))
 	})
 
-	ticker := time.NewTicker(1 * time.Second)
+	interestApp.startReadingMessages()
 
-	go func() {
-		for range ticker.C {
-			interestApp.timer()
-		}
-	}()
+	// ticker := time.NewTicker(1 * time.Second)
+
+	// go func() {
+	// 	for range ticker.C {
+	// 		interestApp.timer()
+	// 	}
+	// }()
 
 	http.HandleFunc("/", interestApp.serveFiles)
 
@@ -96,10 +98,10 @@ func main() {
 	log.Fatal(err)
 }
 
-func (interestApp *InterestApplication) timer() {
-	fmt.Printf("Processing message from queue %s at %s:%s\n", interestApp.RabbitReadQueue, interestApp.RabbitHost, interestApp.RabbitPort)
-	interestApp.LastMessages[0] = "dfdf"
-}
+// func (interestApp *InterestApplication) timer() {
+// 	fmt.Printf("Processing message from queue %s at %s:%s\n", interestApp.RabbitReadQueue, interestApp.RabbitHost, interestApp.RabbitPort)
+// 	interestApp.LastMessages[0] = "dfdf"
+// }
 
 func (interestApp *InterestApplication) serveFiles(w http.ResponseWriter, r *http.Request) {
 	upath := r.URL.Path
