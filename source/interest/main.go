@@ -74,6 +74,7 @@ func main() {
 	interestApp.LastMessages = list.New()
 	interestApp.startReadingMessages()
 
+	//Sends a dummy message to our own queue (just for testing purposes)
 	http.HandleFunc("/dummy", func(w http.ResponseWriter, r *http.Request) {
 		interestApp.publishMessage()
 		fmt.Fprintf(w, "Sent %d", interestApp.dummyCounter)
@@ -87,25 +88,12 @@ func main() {
 		fmt.Fprint(w, (calculatedInterest.Intn(26) + 10))
 	})
 
-	// ticker := time.NewTicker(1 * time.Second)
-
-	// go func() {
-	// 	for range ticker.C {
-	// 		interestApp.timer()
-	// 	}
-	// }()
-
 	http.HandleFunc("/", interestApp.serveFiles)
 
 	fmt.Printf("Backend version %s is listening now at port %s\n", interestApp.AppVersion, port)
 	err := http.ListenAndServe(":"+port, nil)
 	log.Fatal(err)
 }
-
-// func (interestApp *InterestApplication) timer() {
-// 	fmt.Printf("Processing message from queue %s at %s:%s\n", interestApp.RabbitReadQueue, interestApp.RabbitHost, interestApp.RabbitPort)
-// 	interestApp.LastMessages[0] = "dfdf"
-// }
 
 func (interestApp *InterestApplication) serveFiles(w http.ResponseWriter, r *http.Request) {
 	upath := r.URL.Path
@@ -120,8 +108,6 @@ func (interestApp *InterestApplication) serveFiles(w http.ResponseWriter, r *htt
 }
 
 func (interestApp *InterestApplication) home(w http.ResponseWriter, r *http.Request) {
-
-	// loanApp.findBackendVersion()
 
 	t, err := template.ParseFiles("./static/index.html")
 	if err != nil {

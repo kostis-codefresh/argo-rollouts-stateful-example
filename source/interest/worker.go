@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/ThreeDotsLabs/watermill"
 	"github.com/ThreeDotsLabs/watermill-amqp/v2/pkg/amqp"
@@ -41,7 +42,10 @@ func (interestApp *InterestApplication) publishMessage() {
 	if err != nil {
 		panic(err)
 	}
-	msg := message.NewMessage(watermill.NewUUID(), []byte("Hello, world!"))
+	t := time.Now()
+	messageText := fmt.Sprintf("Dummy message sent at %s", t.Format("15:04:05"))
+
+	msg := message.NewMessage(watermill.NewUUID(), []byte(messageText))
 
 	if err := publisher.Publish("example.topic", msg); err != nil {
 		panic(err)
@@ -55,9 +59,9 @@ func (interestApp *InterestApplication) process(messages <-chan *message.Message
 	for msg := range messages {
 		fmt.Printf("received message: %s, payload: %s\n", msg.UUID, string(msg.Payload))
 
-		interestApp.LastMessages.PushBack(msg.Payload)
+		interestApp.LastMessages.PushFront(msg.Payload)
 		if interestApp.LastMessages.Len() > 5 {
-			oldest := interestApp.LastMessages.Front()
+			oldest := interestApp.LastMessages.Back()
 			interestApp.LastMessages.Remove(oldest)
 		}
 
