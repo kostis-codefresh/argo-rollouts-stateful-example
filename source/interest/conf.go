@@ -34,13 +34,21 @@ func (interestApp *InterestApplication) readCurrentConfiguration() {
 	//Reload configuration when file changes
 	viper.OnConfigChange(func(e fsnotify.Event) {
 		fmt.Println("Config file changed:", e.Name)
-		fmt.Printf("Role is %s\n", viper.GetString("role"))
 		interestApp.stopNow()
+		interestApp.reloadSettings()
+		interestApp.startReadingMessages()
 	})
+
+	interestApp.reloadSettings()
+
 	viper.WatchConfig()
 
+}
+
+func (interestApp *InterestApplication) reloadSettings() {
 	fmt.Printf("Role is set %t\n", viper.IsSet("role"))
 	fmt.Printf("Role is %s\n", viper.GetString("role"))
+	fmt.Printf("Queue is %s\n", viper.GetString("rabbitQueue"))
 
 	interestApp.CurrentRole = viper.GetString("role")
 	if strings.HasPrefix(interestApp.CurrentRole, "\"") {
@@ -50,5 +58,4 @@ func (interestApp *InterestApplication) readCurrentConfiguration() {
 	interestApp.RabbitHost = viper.GetString("rabbitHost")
 	interestApp.RabbitPort = viper.GetString("rabbitPort")
 	interestApp.RabbitReadQueue = viper.GetString("rabbitQueue")
-
 }
