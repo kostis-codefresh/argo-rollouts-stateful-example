@@ -9,7 +9,12 @@ import (
 	"github.com/spf13/viper"
 )
 
-func (interestApp *InterestApplication) readCurrentRole() {
+func (interestApp *InterestApplication) readCurrentConfiguration() {
+	viper.SetDefault("role", "unknown")
+	viper.SetDefault("rabbitHost", "localhost")
+	viper.SetDefault("rabbitPort", "5672")
+	viper.SetDefault("rabbitQueue", "devReadQueue")
+
 	viper.SetConfigName("labels")
 	viper.SetConfigType("properties") //Java properties style
 
@@ -20,8 +25,6 @@ func (interestApp *InterestApplication) readCurrentRole() {
 	// all labels as a file in the pod
 	// See https://kubernetes.io/docs/concepts/workloads/pods/downward-api/
 	viper.AddConfigPath("/etc/podinfo/")
-
-	viper.SetDefault("role", "unknown")
 
 	err := viper.ReadInConfig() // Find and read the config file
 	if err != nil {             // Handle errors reading the config file
@@ -42,5 +45,9 @@ func (interestApp *InterestApplication) readCurrentRole() {
 	if strings.HasPrefix(interestApp.CurrentRole, "\"") {
 		interestApp.CurrentRole, _ = strconv.Unquote(interestApp.CurrentRole)
 	}
+
+	interestApp.RabbitHost = viper.GetString("rabbitHost")
+	interestApp.RabbitPort = viper.GetString("rabbitPort")
+	interestApp.RabbitReadQueue = viper.GetString("rabbitQueue")
 
 }

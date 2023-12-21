@@ -7,12 +7,12 @@ toolchain go1.21.5
 require (
 	github.com/ThreeDotsLabs/watermill v1.3.5
 	github.com/ThreeDotsLabs/watermill-amqp/v2 v2.1.1
+	github.com/fsnotify/fsnotify v1.7.0
 	github.com/spf13/viper v1.18.2
 )
 
 require (
 	github.com/cenkalti/backoff/v3 v3.2.2 // indirect
-	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/google/uuid v1.4.0 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect

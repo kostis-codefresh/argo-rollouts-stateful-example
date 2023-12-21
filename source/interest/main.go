@@ -41,13 +41,16 @@ func main() {
 		interestApp.AppVersion = "dev"
 	}
 
-	interestApp.readCurrentRole()
+	interestApp.readCurrentConfiguration()
 
 	// interestApp.CurrentRole = "demoRole"
 	interestApp.RabbitHost = "localhost"
 	interestApp.RabbitPort = "5672"
 	interestApp.RabbitReadQueue = "demoReadQueue"
+
 	interestApp.MessagesProcessed = 0
+	interestApp.LastMessages = list.New()
+	interestApp.startReadingMessages()
 
 	http.HandleFunc("/version", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, interestApp.AppVersion)
@@ -70,9 +73,6 @@ func main() {
 	http.HandleFunc("/health/ready", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "yes")
 	})
-
-	interestApp.LastMessages = list.New()
-	interestApp.startReadingMessages()
 
 	//Sends a dummy message to our own queue (just for testing purposes)
 	http.HandleFunc("/dummy", func(w http.ResponseWriter, r *http.Request) {
