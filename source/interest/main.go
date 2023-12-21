@@ -92,7 +92,9 @@ func main() {
 
 	fmt.Printf("Backend version %s is listening now at port %s\n", interestApp.AppVersion, port)
 	err := http.ListenAndServe(":"+port, nil)
-	log.Fatal(err)
+	if err != nil {
+		log.Fatalf("Error starting server: %v", err)
+	}
 }
 
 func (interestApp *InterestApplication) serveFiles(w http.ResponseWriter, r *http.Request) {

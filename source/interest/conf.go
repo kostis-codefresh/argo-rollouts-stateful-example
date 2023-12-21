@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
@@ -14,10 +15,12 @@ func (interestApp *InterestApplication) readCurrentRole() {
 	//Development mode
 	viper.AddConfigPath(".")
 
-	//This is inject from the Kubernetes downward API
+	//This is injected from the Kubernetes downward API that maps
+	// all labels as a file in the pod
+	// See https://kubernetes.io/docs/concepts/workloads/pods/downward-api/
 	viper.AddConfigPath("/etc/podinfo/")
 
-	// viper.SetDefault("role", "demo")
+	viper.SetDefault("role", "unknown")
 
 	err := viper.ReadInConfig() // Find and read the config file
 	if err != nil {             // Handle errors reading the config file
@@ -35,4 +38,6 @@ func (interestApp *InterestApplication) readCurrentRole() {
 
 	fmt.Printf("Role is set %t\n", viper.IsSet("role"))
 	fmt.Printf("Role is %s\n", viper.GetString("role"))
+
+	interestApp.CurrentRole, _ = strconv.Unquote(viper.GetString("role"))
 }
