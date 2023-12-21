@@ -2,6 +2,7 @@ package main
 
 import (
 	"container/list"
+	"context"
 	"fmt"
 	"html/template"
 	"log"
@@ -25,6 +26,8 @@ type InterestApplication struct {
 	MessagesProcessed int
 	LastMessages      *list.List //Assume that last 5 are enough
 	dummyCounter      int
+
+	stopNow context.CancelFunc //Used to cancel message reading when conf changes
 }
 
 func main() {
@@ -42,11 +45,6 @@ func main() {
 	}
 
 	interestApp.readCurrentConfiguration()
-
-	// interestApp.CurrentRole = "demoRole"
-	interestApp.RabbitHost = "localhost"
-	interestApp.RabbitPort = "5672"
-	interestApp.RabbitReadQueue = "demoReadQueue"
 
 	interestApp.MessagesProcessed = 0
 	interestApp.LastMessages = list.New()

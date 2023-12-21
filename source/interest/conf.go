@@ -35,6 +35,7 @@ func (interestApp *InterestApplication) readCurrentConfiguration() {
 	viper.OnConfigChange(func(e fsnotify.Event) {
 		fmt.Println("Config file changed:", e.Name)
 		fmt.Printf("Role is %s\n", viper.GetString("role"))
+		interestApp.stopNow()
 	})
 	viper.WatchConfig()
 

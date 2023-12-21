@@ -30,7 +30,10 @@ func (interestApp *InterestApplication) startReadingMessages() {
 		panic(err)
 	}
 
-	go interestApp.process(messages)
+	ctx, cancelFunc := context.WithCancel(context.Background())
+	interestApp.stopNow = cancelFunc
+
+	go interestApp.process(messages, ctx)
 	fmt.Printf("Ready to receive messages at %s\n", interestApp.RabbitReadQueue)
 }
 
@@ -57,21 +60,28 @@ func (interestApp *InterestApplication) publishMessage() {
 	interestApp.dummyCounter++
 }
 
-func (interestApp *InterestApplication) process(messages <-chan *message.Message) {
-	interestApp.mu.RLock()
-	defer interestApp.mu.RUnlock()
-	for msg := range messages {
-		fmt.Printf("received message: %s, payload: %s\n", msg.UUID, string(msg.Payload))
+func (interestApp *InterestApplication) process(messages <-chan *message.Message, ctx context.Context) {
 
-		interestApp.LastMessages.PushFront(msg.Payload)
-		if interestApp.LastMessages.Len() > 5 {
-			oldest := interestApp.LastMessages.Back()
-			interestApp.LastMessages.Remove(oldest)
+	for {
+		select {
+		case <-ctx.Done():
+			fmt.Println("New configuration loaded - stopped reading from old queue")
+			return
+		case msg := <-messages:
+			fmt.Printf("received message: %s, payload: %s\n", msg.UUID, string(msg.Payload))
+
+			interestApp.mu.RLock()
+			interestApp.LastMessages.PushFront(msg.Payload)
+			if interestApp.LastMessages.Len() > 5 {
+				oldest := interestApp.LastMessages.Back()
+				interestApp.LastMessages.Remove(oldest)
+			}
+
+			// we need to Acknowledge that we received and processed the message,
+			// otherwise, it will be resent over and over again.
+			msg.Ack()
+			interestApp.MessagesProcessed++
+			interestApp.mu.RUnlock()
 		}
-
-		// we need to Acknowledge that we received and processed the message,
-		// otherwise, it will be resent over and over again.
-		msg.Ack()
-		interestApp.MessagesProcessed++
 	}
 }
