@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
@@ -27,8 +28,6 @@ func (interestApp *InterestApplication) readCurrentRole() {
 		panic(fmt.Errorf("fatal error config file: %w", err))
 	}
 
-	// str, err = strconv.Unquote("'\u2639\u2639'")
-
 	//Reload configuration when file changes
 	viper.OnConfigChange(func(e fsnotify.Event) {
 		fmt.Println("Config file changed:", e.Name)
@@ -39,5 +38,9 @@ func (interestApp *InterestApplication) readCurrentRole() {
 	fmt.Printf("Role is set %t\n", viper.IsSet("role"))
 	fmt.Printf("Role is %s\n", viper.GetString("role"))
 
-	interestApp.CurrentRole, _ = strconv.Unquote(viper.GetString("role"))
+	interestApp.CurrentRole = viper.GetString("role")
+	if strings.HasPrefix(interestApp.CurrentRole, "\"") {
+		interestApp.CurrentRole, _ = strconv.Unquote(interestApp.CurrentRole)
+	}
+
 }
