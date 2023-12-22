@@ -17,9 +17,10 @@
 
     <h1>RabbitMQ tester</h1>
     <!-- Blue color settings-->
-    <h2>Production Publisher</h2>
+    
 
     <div class="entries">
+      <h2>Production Publisher</h2>
       <div class="entry entry-blue">
 
         <span id="current-conf">
@@ -29,8 +30,7 @@
             <li>My RabbitMQ server is at <strong>{{ .RabbitHost }}:{{ .RabbitPort }} </strong></li>
             <li>Queue named <strong>{{ .RabbitReadQueue }} </strong>
             </li>
-            <li>Production has processed <strong id="count">{{ .MessagesProcessed }} </strong> messages so far. Also
-              available at <a href='count'>count</a></li>
+            <li>Production has processed <strong id="count">{{ .MessagesProcessed }} </strong> messages so far</li>
           </ul>
         </span>
         <button class="button button-blue" hx-post="/dummy" hx-target="#dummyCounter">Send Production message</button>
@@ -44,9 +44,10 @@
 
     <!--Green color settings-->
 
-    <h2>Preview Publisher</h2>
+    
 
-    <div class="entries">
+    <div class="entries" class="d">
+      <h2>Preview Publisher</h2>
       <div class="entry entry-green">
 
         <span id="current-conf">
@@ -56,8 +57,7 @@
             <li>My RabbitMQ server is at <strong>{{ .RabbitHost }}:{{ .RabbitPort }} </strong></li>
             <li>Queue named <strong>{{ .RabbitReadQueue }} </strong>
             </li>
-            <li>Preview has processed <strong id="count">{{ .MessagesProcessed }} </strong> messages so far. Also
-              available at <a href='count'>count</a></li>
+            <li>Preview has processed <strong id="count">{{ .MessagesProcessed }} </strong> messages so far</li>
           </ul>
         </span>
         <button class="button button-green" hx-post="/dummy" hx-target="#dummyCounter">Send Preview message</button>
