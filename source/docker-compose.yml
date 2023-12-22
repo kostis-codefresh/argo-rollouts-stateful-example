@@ -7,7 +7,7 @@ services:
       - "5673:5673"
       - "15672:15672"
   interest:
-    build: ./interest
+    build: ./worker
     ports:
       - "8000:8080"
     environment:
@@ -15,7 +15,7 @@ services:
     depends_on:
       - rabbit             
   interest-preview:
-    build: ./interest
+    build: ./worker
     ports:
       - "9000:8080"
     environment:
