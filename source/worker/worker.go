@@ -9,24 +9,24 @@ import (
 	"github.com/ThreeDotsLabs/watermill"
 	"github.com/ThreeDotsLabs/watermill-amqp/v2/pkg/amqp"
 	"github.com/ThreeDotsLabs/watermill/message"
+	"github.com/sethvargo/go-retry"
 )
 
-func retry(attempts int, sleep time.Duration, f func() error) (err error) {
-	for i := 0; i < attempts; i++ {
-		if i > 0 {
-			log.Println("retrying after error:", err)
-			time.Sleep(sleep)
-			sleep *= 2
+func (interestApp *InterestApplication) retryConnecting() {
+	ctx := context.Background()
+	if err := retry.Fibonacci(ctx, 1*time.Second, func(ctx context.Context) error {
+		if err := interestApp.startReadingMessages(); err != nil {
+			// This marks the error as retryable
+			fmt.Println("Cannot connect, will try later ", err)
+			return retry.RetryableError(err)
 		}
-		err = f()
-		if err == nil {
-			return nil
-		}
+		return nil
+	}); err != nil {
+		log.Fatal(err)
 	}
-	return fmt.Errorf("after %d attempts, last error: %s", attempts, err)
 }
 
-func (interestApp *InterestApplication) startReadingMessages() {
+func (interestApp *InterestApplication) startReadingMessages() (err error) {
 	//Format is "amqp://guest:guest@rabbitmq:5672/"
 	amqpURI := fmt.Sprintf("amqp://guest:guest@%s:%s", interestApp.RabbitHost, interestApp.RabbitPort)
 	fmt.Printf("Connecting to %s:%s\n", interestApp.RabbitHost, interestApp.RabbitPort)
@@ -38,12 +38,12 @@ func (interestApp *InterestApplication) startReadingMessages() {
 		watermill.NopLogger{},
 	)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	messages, err := subscriber.Subscribe(context.Background(), interestApp.RabbitReadQueue)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	ctx, cancelFunc := context.WithCancel(context.Background())
@@ -51,6 +51,7 @@ func (interestApp *InterestApplication) startReadingMessages() {
 
 	go interestApp.process(messages, ctx)
 	fmt.Printf("Ready to receive messages at %s\n", interestApp.RabbitReadQueue)
+	return nil
 }
 
 func (interestApp *InterestApplication) publishMessage() {
@@ -61,7 +62,8 @@ func (interestApp *InterestApplication) publishMessage() {
 	amqpConfig := amqp.NewDurableQueueConfig(amqpURI)
 	publisher, err := amqp.NewPublisher(amqpConfig, watermill.NopLogger{})
 	if err != nil {
-		panic(err)
+		fmt.Println("Could not connect to queue", err)
+		return
 	}
 
 	//Just to distinguish messages from each other show the time that each message was sent
@@ -71,7 +73,8 @@ func (interestApp *InterestApplication) publishMessage() {
 	msg := message.NewMessage(watermill.NewUUID(), []byte(messageText))
 
 	if err := publisher.Publish(interestApp.RabbitReadQueue, msg); err != nil {
-		panic(err)
+		fmt.Println("Could not publish message", err)
+		return
 	}
 	interestApp.dummyCounter++
 }

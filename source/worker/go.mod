@@ -8,6 +8,7 @@ require (
 	github.com/ThreeDotsLabs/watermill v1.3.5
 	github.com/ThreeDotsLabs/watermill-amqp/v2 v2.1.1
 	github.com/fsnotify/fsnotify v1.7.0
+	github.com/sethvargo/go-retry v0.2.4
 	github.com/spf13/viper v1.18.2
 )
 

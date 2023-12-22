@@ -59,5 +59,5 @@ func (interestApp *InterestApplication) reloadSettings() {
 	interestApp.RabbitPort = viper.GetString("rabbitPort")
 	interestApp.RabbitReadQueue = viper.GetString("rabbitQueue")
 
-	interestApp.startReadingMessages()
+	interestApp.retryConnecting()
 }
