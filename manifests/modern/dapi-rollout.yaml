@@ -30,9 +30,11 @@ spec:
       activeMetadata:
         labels:
           role: active
+          rabbitQueue: myProductionQueue
       previewMetadata:
         labels:
-          role: preview       
+          role: preview
+          rabbitQueue: myPreviewQueue       
   revisionHistoryLimit: 1    
   selector:
     matchLabels:

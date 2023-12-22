@@ -4,4 +4,4 @@ io.codefresh/demo="in-container"
 role="active"
 rabbitHost=rabbit
 rabbitPort=5672
-rabbitQueue=myReadQueue
+rabbitQueue=myProductionQueue
