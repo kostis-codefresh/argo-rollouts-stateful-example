@@ -28,12 +28,12 @@
           <ul>
 
             <li>My RabbitMQ server is at <strong>{{ .RabbitHost }}:{{ .RabbitPort }} </strong></li>
-            <li>Queue named <strong>{{ .RabbitReadQueue }} </strong>
+            <li>Queue named <strong>{{ .RabbitQueue }} </strong>
             </li>
-            <li>Production has processed <strong id="count">{{ .MessagesProcessed }} </strong> messages so far</li>
+            <li>Production has processed <strong id="count">{{ .ProductionMessagesProcessed }} </strong> messages so far</li>
           </ul>
         </span>
-        <button class="button button-blue" hx-post="/dummy" hx-target="#dummyCounter">Send Production message</button>
+        <button class="button button-blue" hx-post="/production" hx-target="#dummyCounter">Send Production message</button>
 
         <span id="dummyCounter">
           Sent 0
@@ -54,13 +54,13 @@
           Preview worker settings</code>
           <ul>
 
-            <li>My RabbitMQ server is at <strong>{{ .RabbitHost }}:{{ .RabbitPort }} </strong></li>
-            <li>Queue named <strong>{{ .RabbitReadQueue }} </strong>
+            <li>My RabbitMQ server is at <strong>{{ .RabbitPreviewHost }}:{{ .RabbitPreviewPort }} </strong></li>
+            <li>Queue named <strong>{{ .RabbitPreviewQueue }} </strong>
             </li>
-            <li>Preview has processed <strong id="count">{{ .MessagesProcessed }} </strong> messages so far</li>
+            <li>Preview has processed <strong id="count">{{ .PreviewMessagesProcessed }} </strong> messages so far</li>
           </ul>
         </span>
-        <button class="button button-green" hx-post="/dummy" hx-target="#dummyCounter">Send Preview message</button>
+        <button class="button button-green" hx-post="/preview" hx-target="#dummyCounter">Send Preview message</button>
 
         <span id="dummyCounter">
           Sent 0
