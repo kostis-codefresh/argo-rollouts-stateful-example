@@ -1,15 +1,24 @@
-services:
-  loan:
-    build: ./loan
+version: '3.8'
+services: 
+  rabbit:
+    image: rabbitmq:3-management
     ports:
-      - "9000:8080"
-    environment:
-    - APP_VERSION=1.5  
-    depends_on:
-      - interest
+      - "5672:5672"
+      - "5673:5673"
+      - "15672:15672"
   interest:
     build: ./interest
     ports:
-      - "8080:8080"
+      - "8000:8080"
     environment:
-    - APP_VERSION=2.0          
+    - APP_VERSION=1.0 
+    depends_on:
+      - rabbit             
+  interest-preview:
+    build: ./interest
+    ports:
+      - "9000:8080"
+    environment:
+    - APP_VERSION=2.0 
+    depends_on:
+      - rabbit    
