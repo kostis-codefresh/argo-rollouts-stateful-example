@@ -33,9 +33,9 @@
             <li>Production has processed <strong id="count">{{ .ProductionMessagesProcessed }} </strong> messages so far</li>
           </ul>
         </span>
-        <button class="button button-blue" hx-post="/production" hx-target="#dummyCounter">Send Production message</button>
+        <button class="button button-blue" hx-post="/production" hx-target="#productionCounter">Send Production message</button>
 
-        <span id="dummyCounter">
+        <span id="productionCounter">
           Sent 0
         </span>
       </div>
@@ -60,9 +60,9 @@
             <li>Preview has processed <strong id="count">{{ .PreviewMessagesProcessed }} </strong> messages so far</li>
           </ul>
         </span>
-        <button class="button button-green" hx-post="/preview" hx-target="#dummyCounter">Send Preview message</button>
+        <button class="button button-green" hx-post="/preview" hx-target="#previewCounter">Send Preview message</button>
 
-        <span id="dummyCounter">
+        <span id="previewCounter">
           Sent 0
         </span>
       </div>

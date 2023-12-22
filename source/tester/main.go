@@ -4,13 +4,11 @@ import (
 	"fmt"
 	"html/template"
 	"log"
-	"math/rand"
 	"net/http"
 	"os"
 	"path"
 	"path/filepath"
 	"sync"
-	"time"
 )
 
 type TesterApplication struct {
@@ -62,12 +60,6 @@ func main() {
 	http.HandleFunc("/preview", func(w http.ResponseWriter, r *http.Request) {
 		testerApp.publishPreviewMessage()
 		fmt.Fprintf(w, "Sent %d", testerApp.PreviewMessagesSent)
-	})
-
-	http.HandleFunc("/api/v1/interest", func(w http.ResponseWriter, r *http.Request) {
-		randomSource := rand.NewSource(time.Now().UnixNano())
-		calculatedInterest := rand.New(randomSource)
-		fmt.Fprint(w, (calculatedInterest.Intn(26) + 10))
 	})
 
 	http.HandleFunc("/", testerApp.serveFiles)

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"time"
 
 	"github.com/ThreeDotsLabs/watermill"
@@ -22,7 +23,7 @@ func (testerApp *TesterApplication) publishProductionMessage() {
 
 	//Just to distinguish messages from each other show the time that each message was sent
 	t := time.Now()
-	messageText := fmt.Sprintf("Production message sent at %s", t.Format("15:04:05"))
+	messageText := fmt.Sprintf("Production interest rate %d sent at %s", sampleInterestRate(), t.Format("15:04:05"))
 
 	msg := message.NewMessage(watermill.NewUUID(), []byte(messageText))
 
@@ -53,4 +54,11 @@ func (testerApp *TesterApplication) publishPreviewMessage() {
 		panic(err)
 	}
 	testerApp.PreviewMessagesSent++
+
+}
+
+func sampleInterestRate() int {
+	randomSource := rand.NewSource(time.Now().UnixNano())
+	calculatedInterest := rand.New(randomSource)
+	return calculatedInterest.Intn(35) + 3
 }

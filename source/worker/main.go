@@ -6,13 +6,11 @@ import (
 	"fmt"
 	"html/template"
 	"log"
-	"math/rand"
 	"net/http"
 	"os"
 	"path"
 	"path/filepath"
 	"sync"
-	"time"
 )
 
 type InterestApplication struct {
@@ -77,12 +75,6 @@ func main() {
 	})
 
 	http.HandleFunc("/list", interestApp.listNotifications)
-
-	http.HandleFunc("/api/v1/interest", func(w http.ResponseWriter, r *http.Request) {
-		randomSource := rand.NewSource(time.Now().UnixNano())
-		calculatedInterest := rand.New(randomSource)
-		fmt.Fprint(w, (calculatedInterest.Intn(26) + 10))
-	})
 
 	http.HandleFunc("/", interestApp.serveFiles)
 
