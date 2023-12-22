@@ -43,11 +43,19 @@ h1 {
     border-radius: 5px;
     align-items: center;
     border: 1px solid #92D8D3;
-    background-color: #C1EBEC;
+
     margin-bottom: 8px;
     padding: 5px 10px;
     display: flex;
 }
+.entry-blue{
+    background-color: #86bbf8;
+}
+
+.entry-green{
+    background-color: #69af7a;
+}
+
 .entry span{
     font-family: 'Poppins',sans-serif;
     font-size: 15px;
@@ -61,13 +69,19 @@ h1 {
 
 }
 
+.button-blue{
+    background-color: #18117e;
+}
+
+.button-green{
+    background-color: #087022;
+}
 .button{
     position: relative;
     padding: 5px;
     margin: 3px 3px;
     font-weight: 500;
     font-size: 16px;
-    background-color: #08B1AB;
     border: none;
     color: #ffffff;
     cursor: pointer;

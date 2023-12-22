@@ -16,26 +16,24 @@
     <img src="transparent-logo.png" class="center">
 
     <h1>RabbitMQ tester</h1>
+    <!-- Blue color settings-->
     <h2>Production Publisher</h2>
 
     <div class="entries">
-
-
-     
-      <div class="entry">
+      <div class="entry entry-blue">
 
         <span id="current-conf">
           Production worker settings</code>
           <ul>
-          
+
             <li>My RabbitMQ server is at <strong>{{ .RabbitHost }}:{{ .RabbitPort }} </strong></li>
-            <li>Queue named <strong>{{ .RabbitReadQueue }} </strong> 
+            <li>Queue named <strong>{{ .RabbitReadQueue }} </strong>
             </li>
-            <li>Production has processed <strong id="count">{{ .MessagesProcessed }} </strong> messages so far. Also available at <a
-            href='count'>count</a></li>
+            <li>Production has processed <strong id="count">{{ .MessagesProcessed }} </strong> messages so far. Also
+              available at <a href='count'>count</a></li>
           </ul>
         </span>
-        <button class="button" hx-post="/dummy" hx-target="#dummyCounter">Send Production message</button>
+        <button class="button button-blue" hx-post="/dummy" hx-target="#dummyCounter">Send Production message</button>
 
         <span id="dummyCounter">
           Sent 0
@@ -44,10 +42,32 @@
 
     </div>
 
-    
+    <!--Green color settings-->
 
-   
+    <h2>Preview Publisher</h2>
 
+    <div class="entries">
+      <div class="entry entry-green">
+
+        <span id="current-conf">
+          Preview worker settings</code>
+          <ul>
+
+            <li>My RabbitMQ server is at <strong>{{ .RabbitHost }}:{{ .RabbitPort }} </strong></li>
+            <li>Queue named <strong>{{ .RabbitReadQueue }} </strong>
+            </li>
+            <li>Preview has processed <strong id="count">{{ .MessagesProcessed }} </strong> messages so far. Also
+              available at <a href='count'>count</a></li>
+          </ul>
+        </span>
+        <button class="button button-green" hx-post="/dummy" hx-target="#dummyCounter">Send Preview message</button>
+
+        <span id="dummyCounter">
+          Sent 0
+        </span>
+      </div>
+
+    </div>
   </div>
 
 </body>
