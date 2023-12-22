@@ -1,4 +1,4 @@
-module github.com/kostis-codefresh/multi-service-argo-rollouts-example/interest
+module github.com/kostis-codefresh/multi-service-argo-rollouts-example/worker
 
 go 1.21
 
