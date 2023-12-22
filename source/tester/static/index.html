@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Tester</title>
+  <link rel="shortcut icon" href="favicon.png" type="image/png" />
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/htmx.org@1.8.0"
+    integrity="sha384-cZuAZ+ZbwkNRnrKi05G/fjBX+azI9DNOkNYysZ0I/X5ZFgsmMiBXgDZof30F5ofc"
+    crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div class="container">
+    <img src="transparent-logo.png" class="center">
+
+    <h1>RabbitMQ tester</h1>
+    <h2>Production Publisher</h2>
+
+    <div class="entries">
+
+
+     
+      <div class="entry">
+
+        <span id="current-conf">
+          Production worker settings</code>
+          <ul>
+          
+            <li>My RabbitMQ server is at <strong>{{ .RabbitHost }}:{{ .RabbitPort }} </strong></li>
+            <li>Queue named <strong>{{ .RabbitReadQueue }} </strong> 
+            </li>
+            <li>Production has processed <strong id="count">{{ .MessagesProcessed }} </strong> messages so far. Also available at <a
+            href='count'>count</a></li>
+          </ul>
+        </span>
+        <button class="button" hx-post="/dummy" hx-target="#dummyCounter">Send Production message</button>
+
+        <span id="dummyCounter">
+          Sent 0
+        </span>
+      </div>
+
+    </div>
+
+    
+
+   
+
+  </div>
+
+</body>
+
+</html>
