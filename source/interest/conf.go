@@ -36,7 +36,7 @@ func (interestApp *InterestApplication) readCurrentConfiguration() {
 		fmt.Println("Config file changed:", e.Name)
 		interestApp.stopNow()
 		interestApp.reloadSettings()
-		interestApp.startReadingMessages()
+
 	})
 
 	interestApp.reloadSettings()
@@ -58,4 +58,6 @@ func (interestApp *InterestApplication) reloadSettings() {
 	interestApp.RabbitHost = viper.GetString("rabbitHost")
 	interestApp.RabbitPort = viper.GetString("rabbitPort")
 	interestApp.RabbitReadQueue = viper.GetString("rabbitQueue")
+
+	interestApp.startReadingMessages()
 }

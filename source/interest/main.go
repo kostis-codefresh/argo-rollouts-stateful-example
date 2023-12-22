@@ -44,11 +44,9 @@ func main() {
 		interestApp.AppVersion = "dev"
 	}
 
-	interestApp.readCurrentConfiguration()
-
 	interestApp.MessagesProcessed = 0
 	interestApp.LastMessages = list.New()
-	interestApp.startReadingMessages()
+	interestApp.readCurrentConfiguration()
 
 	http.HandleFunc("/version", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, interestApp.AppVersion)
