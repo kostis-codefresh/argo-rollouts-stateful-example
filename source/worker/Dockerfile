@@ -14,7 +14,7 @@ RUN apk add --no-cache ca-certificates bash
 
 COPY --from=build-env /tmp/workdir/static /app/static
 COPY --from=build-env /tmp/workdir/worker /app/worker
-COPY --from=build-env /tmp/workdir/labels.docker-compose /app/labels
+COPY --from=build-env /tmp/workdir/labels /app/labels
 
 WORKDIR /app
 
