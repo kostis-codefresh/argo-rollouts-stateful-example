@@ -40,7 +40,7 @@ spec:
         app: worker
     spec:
       containers:
-      - name: my-backend-container
+      - name: my-worker-container
         image: docker.io/kostiscodefresh/worker:latest
         imagePullPolicy: Always
         env:

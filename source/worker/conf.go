@@ -46,15 +46,19 @@ func (interestApp *InterestApplication) readCurrentConfiguration() {
 }
 
 func (interestApp *InterestApplication) reloadSettings() {
+
 	fmt.Printf("Role is set %t\n", viper.IsSet("role"))
-	fmt.Printf("Role is %s\n", viper.GetString("role"))
-	fmt.Printf("Queue is %s\n", viper.GetString("rabbitQueue"))
 
 	interestApp.CurrentRole = unQuoteIfNeeded(viper.GetString("role"))
 
 	interestApp.RabbitHost = unQuoteIfNeeded(viper.GetString("rabbitHost"))
 	interestApp.RabbitPort = unQuoteIfNeeded(viper.GetString("rabbitPort"))
 	interestApp.RabbitReadQueue = unQuoteIfNeeded(viper.GetString("rabbitQueue"))
+
+	fmt.Printf("Role is %s\n", interestApp.CurrentRole)
+	fmt.Printf("RabbitHost is %s\n", interestApp.RabbitHost)
+	fmt.Printf("RabbitPort is %s\n", interestApp.RabbitPort)
+	fmt.Printf("Queue is %s\n", interestApp.RabbitReadQueue)
 
 	interestApp.retryConnecting()
 }
