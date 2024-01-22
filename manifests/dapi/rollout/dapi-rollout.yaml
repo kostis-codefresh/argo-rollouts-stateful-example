@@ -31,10 +31,12 @@ spec:
         labels:
           role: active
           rabbitQueue: myProductionQueue
+          rabbitHost: rabbitmq
       previewMetadata:
         labels:
           role: preview
-          rabbitQueue: myPreviewQueue       
+          rabbitQueue: myPreviewQueue   
+          rabbitHost: rabbitmq    
   revisionHistoryLimit: 1    
   selector:
     matchLabels:

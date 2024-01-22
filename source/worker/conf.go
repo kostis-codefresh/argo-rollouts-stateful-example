@@ -50,14 +50,19 @@ func (interestApp *InterestApplication) reloadSettings() {
 	fmt.Printf("Role is %s\n", viper.GetString("role"))
 	fmt.Printf("Queue is %s\n", viper.GetString("rabbitQueue"))
 
-	interestApp.CurrentRole = viper.GetString("role")
-	if strings.HasPrefix(interestApp.CurrentRole, "\"") {
-		interestApp.CurrentRole, _ = strconv.Unquote(interestApp.CurrentRole)
-	}
+	interestApp.CurrentRole = unQuoteIfNeeded(viper.GetString("role"))
 
-	interestApp.RabbitHost = viper.GetString("rabbitHost")
-	interestApp.RabbitPort = viper.GetString("rabbitPort")
-	interestApp.RabbitReadQueue = viper.GetString("rabbitQueue")
+	interestApp.RabbitHost = unQuoteIfNeeded(viper.GetString("rabbitHost"))
+	interestApp.RabbitPort = unQuoteIfNeeded(viper.GetString("rabbitPort"))
+	interestApp.RabbitReadQueue = unQuoteIfNeeded(viper.GetString("rabbitQueue"))
 
 	interestApp.retryConnecting()
+}
+
+func unQuoteIfNeeded(input string) string {
+	result := ""
+	if strings.HasPrefix(input, "\"") {
+		result, _ = strconv.Unquote(input)
+	}
+	return result
 }

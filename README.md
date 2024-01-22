@@ -63,38 +63,34 @@ And now you can use
 cd manifests/stateful-rollout
 kubectl apply -f . 
 kubectl port-forward svc/rabbitmq 15672:15672
-kubectl port-forward svc/my-plain-frontend-service 9000:8080 -n plain
+kubectl port-forward svc/worker-active 8000:8080 
+kubectl port-forward svc/worker-preview 9000:8080 for preview worker
 ```
 
 And now you can use 
 
 * `http://localhost:15672` for RabbitMQ
 * `http://localhost:8000` for Stable worker
+* `http://localhost:9000` for preview worker
 
-or launch the file `example.html` in your browser found at the root 
-of the repository.
 
 ## Start a rollout
 
-```
-cd manifests/modern
-kubectl create ns modern
-kubectl apply -f . -n modern
-kubectl port-forward svc/backend-active 8000:8080 -n modern
-kubectl port-forward svc/backend-preview 8050:8080 -n modern
-
-kubectl port-forward svc/frontend-active 9000:8080 -n modern
-kubectl port-forward svc/frontend-preview 9050:8080 -n modern
-```
-
-You can now access the backend at `http://localhost:8000` (old) and `http://localhost:8050` (new)
-and the backend at `http://localhost:9000` (old) and `http://localhost:9050` (new)
-
-To see what the rollouts are doing
+To see what the rollout is doing
 
 ```
-kubectl-argo-rollouts get rollout my-frontend -n modern
-kubectl-argo-rollouts get rollout my-backend -n modern
+kubectl-argo-rollouts get rollout my-worker 
 ```
+
+Edit the file worker.yml and update the env version at line 43
+to 2.0. Save the file and re-apply with kubectl
+
+Promote the rollout when ready with
+
+```
+kubectl-argo-rollouts promote my-worker 
+```
+
+
 
 
