@@ -63,6 +63,7 @@ And now you can use
 cd manifests/stateful-rollout
 kubectl apply -f . 
 kubectl port-forward svc/rabbitmq 15672:15672
+kubectl port-forward svc/rabbitmq 5672:5672
 kubectl port-forward svc/worker-active 8000:8080 
 kubectl port-forward svc/worker-preview 9000:8080 for preview worker
 ```
