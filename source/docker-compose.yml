@@ -30,4 +30,5 @@ services:
     - type: bind
       source: ./compose/labels.preview
       target: /app/labels       
-      
+   
+

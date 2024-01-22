@@ -41,7 +41,7 @@ You can now access the producer at `http://localhost:7000`
 Click the *Production* button to send messages to the worker
 
 
-## Run all services at the same time
+### Run all services at the same time
 
 Install [Docker compose](https://docs.docker.com/compose/) (no need for local GoLang installation)
 
@@ -50,21 +50,31 @@ cd src
 docker compose up
 ```
 
-And now you can use the same URLs as above to access the services.
+And now you can use 
 
-## Run on Kubernetes as deployments
+* `http://localhost:15672` for RabbitMQ
+* `http://localhost:8000` for Stable worker
+* `http://localhost:9000` for Preview Worker
+
+
+### Deploy on Kubernetes
 
 ```
-cd manifests/plain
-kubectl create ns plain
-kubectl apply -f . -n plain
-kubectl port-forward svc/my-plain-backend-service 8000:8080 -n plain
+cd manifests/stateful-rollout
+kubectl apply -f . 
+kubectl port-forward svc/rabbitmq 15672:15672
 kubectl port-forward svc/my-plain-frontend-service 9000:8080 -n plain
 ```
 
-You can now access the backend at `http://localhost:8000` and the backend at `http://localhost:9000`
+And now you can use 
 
-## Run on Kubernetes as Rollouts (modern app)
+* `http://localhost:15672` for RabbitMQ
+* `http://localhost:8000` for Stable worker
+
+or launch the file `example.html` in your browser found at the root 
+of the repository.
+
+## Start a rollout
 
 ```
 cd manifests/modern
