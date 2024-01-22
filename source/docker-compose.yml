@@ -6,7 +6,7 @@ services:
       - "5672:5672"
       - "5673:5673"
       - "15672:15672"
-  interest:
+  worker:
     build: ./worker
     ports:
       - "8000:8080"
@@ -17,8 +17,8 @@ services:
     volumes:
     - type: bind
       source: ./compose/labels.production
-      target: /app/labels                
-  interest-preview:
+      target: /etc/podinfo/labels                
+  worker-preview:
     build: ./worker
     ports:
       - "9000:8080"
@@ -29,6 +29,6 @@ services:
     volumes:
     - type: bind
       source: ./compose/labels.preview
-      target: /app/labels       
+      target: /etc/podinfo/labels       
    
 
