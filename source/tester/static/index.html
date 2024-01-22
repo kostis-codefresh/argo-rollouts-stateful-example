@@ -30,7 +30,6 @@
             <li>My RabbitMQ server is at <strong>{{ .RabbitHost }}:{{ .RabbitPort }} </strong></li>
             <li>Queue named <strong>{{ .RabbitQueue }} </strong>
             </li>
-            <li>Production has processed <strong id="count">{{ .ProductionMessagesProcessed }} </strong> messages so far</li>
           </ul>
         </span>
         <button class="button button-blue" hx-post="/production" hx-target="#productionCounter">Send Production message</button>
@@ -57,7 +56,6 @@
             <li>My RabbitMQ server is at <strong>{{ .RabbitPreviewHost }}:{{ .RabbitPreviewPort }} </strong></li>
             <li>Queue named <strong>{{ .RabbitPreviewQueue }} </strong>
             </li>
-            <li>Preview has processed <strong id="count">{{ .PreviewMessagesProcessed }} </strong> messages so far</li>
           </ul>
         </span>
         <button class="button button-green" hx-post="/preview" hx-target="#previewCounter">Send Preview message</button>

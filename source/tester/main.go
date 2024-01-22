@@ -19,11 +19,9 @@ type TesterApplication struct {
 	RabbitPreviewPort  string
 	RabbitPreviewQueue string
 
-	mu                          sync.RWMutex
-	ProductionMessagesProcessed int
-	PreviewMessagesProcessed    int
-	ProductionMessagesSent      int
-	PreviewMessagesSent         int
+	mu                     sync.RWMutex
+	ProductionMessagesSent int
+	PreviewMessagesSent    int
 }
 
 func main() {
