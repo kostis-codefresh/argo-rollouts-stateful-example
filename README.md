@@ -3,8 +3,11 @@
 Example with Argo Rollouts with two services that use a queue (RabbitMQ in our case).
 We want to do a blue/green deployment without affecting the production queue.
 
+## Local development
 
-## Run RabbitMQ locally
+This is the workflow when you need to change the source code.
+
+### Run RabbitMQ locally
 
 Install Docker 
 
@@ -14,16 +17,28 @@ docker run --name some-rabbit -p 5672:5672 -p 5673:5673 -p 15672:15672 rabbitmq:
 You can visit the dashboard at `http://localhost:15672`.
 Username and password are `guest:guest`
 
-## Run only the backend manually
+### Run the worker manually
 
 Install [GoLang](https://go.dev/) locally
 
 ```
-cd source/interest
+cd source/worker
 APP_VERSION=1.2  go run .
 ```
-You can now access the backend at `http://localhost:8080`
+You can now access the worker at `http://localhost:8080`
 
+Click the button to test RabbitMQ connection - the worker sends
+messages to itself
+
+### Run the tester/producer locally
+
+```
+cd source/tester
+go run .
+```
+You can now access the producer at `http://localhost:7000`
+
+Click the *Production* button to send messages to the worker
 
 
 ## Run all services at the same time
